@@ -8,28 +8,37 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+  id                   String                 @id @default(cuid())
+  name                 String?
+  email                String?                @unique
+  emailVerified        DateTime?
+  image                String?
+  accounts             Account[]
+  sessions             Session[]
+  tasks                Task[]
+  studySessions        StudySession[]
+  ownedProjects        Project[]              @relation("ProjectOwner")
+  memberships          ProjectMember[]
+  assignedProjectTasks ProjectTask[]          @relation("ProjectTaskAssignee")
+  createdProjectTasks  ProjectTask[]          @relation("ProjectTaskCreator")
+  projectMessages      ProjectMessage[]
+  requestedExtensions  TaskExtensionRequest[] @relation("ExtensionRequester")
+  decidedExtensions    TaskExtensionRequest[] @relation("ExtensionDecider")
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?
-  access_token       String?
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?
-  session_state      String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -50,4 +59,129 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Task {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  module    String?
+  dueDate   String?
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, completed, createdAt])
+}
+
+model StudySession {
+  id              String    @id @default(cuid())
+  userId          String
+  startedAt       DateTime  @default(now())
+  completedAt     DateTime?
+  abandonedAt     DateTime?
+  durationSeconds Int       @default(1500)
+  // Set to userId while active, otherwise null. SQLite permits multiple nulls.
+  // This database constraint prevents two active timers across tabs/requests.
+  activeUserId    String?   @unique
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, completedAt])
+}
+
+model Project {
+  id                String                 @id @default(cuid())
+  name              String
+  description       String?
+  ownerId           String
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+  owner             User                   @relation("ProjectOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  members           ProjectMember[]
+  tasks             ProjectTask[]
+  messages          ProjectMessage[]
+  invitation        ProjectInvitation?
+  extensionRequests TaskExtensionRequest[]
+
+  @@index([ownerId])
+}
+
+model ProjectMember {
+  projectId String
+  userId    String
+  joinedAt  DateTime @default(now())
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, userId])
+  @@index([userId])
+}
+
+model ProjectTask {
+  id                String                 @id @default(cuid())
+  projectId         String
+  title             String
+  details           String?
+  // SQLite does not support Prisma enums. Values are validated on the server.
+  priority          String                 @default("MEDIUM")
+  dueDate           String?
+  assigneeId        String?
+  createdById       String
+  completed         Boolean                @default(false)
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+  project           Project                @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  assignee          User?                  @relation("ProjectTaskAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  createdBy         User                   @relation("ProjectTaskCreator", fields: [createdById], references: [id], onDelete: Cascade)
+  messages          ProjectMessage[]
+  extensionRequests TaskExtensionRequest[]
+
+  @@index([projectId, completed, dueDate])
+  @@index([assigneeId])
+}
+
+model ProjectMessage {
+  id        String       @id @default(cuid())
+  projectId String
+  authorId  String
+  taskId    String?
+  body      String
+  createdAt DateTime     @default(now())
+  project   Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  author    User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  task      ProjectTask? @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, createdAt])
+  @@index([taskId])
+}
+
+model ProjectInvitation {
+  projectId String    @id
+  tokenHash String    @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  project   Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model TaskExtensionRequest {
+  id            String      @id @default(cuid())
+  projectId     String
+  taskId        String
+  requestedById String
+  requestedDate String
+  reason        String
+  status        String      @default("PENDING")
+  // Only one unresolved request per task. Null once decided.
+  pendingTaskId String?     @unique
+  createdAt     DateTime    @default(now())
+  decidedAt     DateTime?
+  decidedById   String?
+  project       Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  task          ProjectTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  requestedBy   User        @relation("ExtensionRequester", fields: [requestedById], references: [id], onDelete: Cascade)
+  decidedBy     User?       @relation("ExtensionDecider", fields: [decidedById], references: [id], onDelete: SetNull)
+
+  @@index([projectId, status, createdAt])
 }
