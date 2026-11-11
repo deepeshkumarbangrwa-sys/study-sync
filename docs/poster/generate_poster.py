@@ -8,7 +8,7 @@ from pptx.enum.shapes import MSO_SHAPE
 from pptx.enum.text import MSO_AUTO_SIZE, PP_ALIGN, MSO_ANCHOR
 from pptx.util import Inches, Pt
 from reportlab.lib.colors import HexColor as _HexColor, white
-from reportlab.lib.pagesizes import landscape
+from reportlab.lib.pagesizes import A3, landscape
 from reportlab.pdfgen import canvas
 
 
@@ -16,6 +16,8 @@ ROOT = Path(__file__).resolve().parents[2]
 OUT = Path(__file__).resolve().parent
 PPTX_PATH = OUT / "PadhSang_Poster_A1_Landscape.pptx"
 PDF_PATH = OUT / "PadhSang_Poster_A1_Landscape.pdf"
+A3_PPTX_PATH = OUT / "PadhSang_Poster_A3_Landscape.pptx"
+A3_PDF_PATH = OUT / "PadhSang_Poster_A3_Landscape.pdf"
 
 SCREENSHOTS = {
     "dashboard": next((ROOT / "test-results").rglob("dashboard-desktop.png")),
@@ -310,6 +312,48 @@ def build_pptx():
     prs.save(PPTX_PATH)
 
 
+def build_a3_pptx():
+    """Scale the editable A1 slide to exact A3 landscape dimensions."""
+    prs = Presentation(PPTX_PATH)
+    original_width = prs.slide_width
+    original_height = prs.slide_height
+    target_width = Inches(16.5354)
+    target_height = Inches(11.6929)
+    sx = target_width / original_width
+    sy = target_height / original_height
+    text_scale = min(sx, sy)
+    prs.slide_width = target_width
+    prs.slide_height = target_height
+    for slide in prs.slides:
+        for shape in slide.shapes:
+            shape.left = int(shape.left * sx)
+            shape.top = int(shape.top * sy)
+            shape.width = int(shape.width * sx)
+            shape.height = int(shape.height * sy)
+            if getattr(shape, "has_text_frame", False):
+                frame = shape.text_frame
+                frame.margin_left = int(frame.margin_left * sx)
+                frame.margin_right = int(frame.margin_right * sx)
+                frame.margin_top = int(frame.margin_top * sy)
+                frame.margin_bottom = int(frame.margin_bottom * sy)
+                for paragraph in frame.paragraphs:
+                    if paragraph.font.size:
+                        paragraph.font.size = int(paragraph.font.size * text_scale)
+                    if paragraph.space_before:
+                        paragraph.space_before = int(paragraph.space_before * text_scale)
+                    if paragraph.space_after:
+                        paragraph.space_after = int(paragraph.space_after * text_scale)
+                    for run in paragraph.runs:
+                        if run.font.size:
+                            run.font.size = int(run.font.size * text_scale)
+            try:
+                if shape.line.width:
+                    shape.line.width = int(shape.line.width * text_scale)
+            except (AttributeError, TypeError):
+                pass
+    prs.save(A3_PPTX_PATH)
+
+
 def draw_wrapped(c, text, x, y, width, font="Helvetica", size=17/72,
                  colour=INK, leading=None, bullet=False):
     leading = leading or size * 1.26
@@ -354,10 +398,10 @@ def pdf_image_contain(c, path, x, y, w, h):
                 pw, ph, preserveAspectRatio=True, mask="auto")
 
 
-def build_pdf():
-    # A1 landscape in points.
-    page = landscape((1683.78, 2383.94))
-    base = canvas.Canvas(str(PDF_PATH), pagesize=page)
+def build_pdf(path=PDF_PATH, page=None):
+    # A1 landscape by default; the same logical grid scales cleanly to A3.
+    page = page or landscape((1683.78, 2383.94))
+    base = canvas.Canvas(str(path), pagesize=page)
     pw, ph = page
     sx, sy = pw / W, ph / H
     c = ScaledCanvas(base, sx, sy)
@@ -465,5 +509,9 @@ def build_pdf():
 if __name__ == "__main__":
     build_pptx()
     build_pdf()
+    build_a3_pptx()
+    build_pdf(A3_PDF_PATH, landscape(A3))
     print(PPTX_PATH)
     print(PDF_PATH)
+    print(A3_PPTX_PATH)
+    print(A3_PDF_PATH)
