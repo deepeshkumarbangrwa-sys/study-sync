@@ -3,8 +3,8 @@ import type { ReactNode } from "react"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "StudiVanta — Plan. Collaborate. Progress.",
-  description: "Plan projects, collaborate with your team, manage deadlines, and make steady progress with StudiVanta.",
+  title: "PadhSang — Plan. Collaborate. Progress.",
+  description: "Plan projects, collaborate with your team, manage deadlines, and make steady progress with PadhSang.",
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {

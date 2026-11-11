@@ -23,7 +23,7 @@ async function run<T>(operation: (userId: string) => Promise<T>): Promise<Projec
     return { ok: true, data }
   } catch (error) {
     if (error instanceof ProjectError) return { ok: false, error: error.message }
-    console.error("StudiVanta could not save a project change.", error instanceof Error ? error.name : "UnknownError")
+    console.error("PadhSang could not save a project change.", error instanceof Error ? error.name : "UnknownError")
     return { ok: false, error: "We couldn't save that change. Please try again." }
   }
 }

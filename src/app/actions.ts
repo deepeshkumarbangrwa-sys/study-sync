@@ -24,7 +24,7 @@ async function runAction<T>(operation: (userId: string) => Promise<T>): Promise<
     return { ok: true, data }
   } catch (error) {
     if (error instanceof PlannerError) return { ok: false, error: error.message }
-    console.error("StudiVanta could not save a planner change.", error instanceof Error ? error.name : "UnknownError")
+    console.error("PadhSang could not save a planner change.", error instanceof Error ? error.name : "UnknownError")
     return { ok: false, error: "We couldn't save that change. Please try again." }
   }
 }

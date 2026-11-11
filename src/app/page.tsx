@@ -29,8 +29,8 @@ export default async function HomePage() {
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-5 py-5 sm:px-8">
           <div className="flex items-center gap-3">
-            <div aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-xl bg-indigo-600 font-bold text-white">SV</div>
-            <div><p className="text-xl font-bold tracking-tight">StudiVanta</p><p className="text-xs text-slate-500">Plan. Collaborate. Progress.</p></div>
+            <div aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-xl bg-indigo-600 font-bold text-white">PS</div>
+            <div><p className="text-xl font-bold tracking-tight">PadhSang</p><p className="text-xs text-slate-500">Plan. Collaborate. Progress.</p></div>
           </div>
           <nav aria-label="Main navigation" className="order-last flex w-full gap-2 border-t border-slate-100 pt-4 md:order-none md:w-auto md:border-0 md:pt-0">
             <Link href="/projects" className="rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700">Projects</Link>

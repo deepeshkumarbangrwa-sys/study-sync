@@ -1,4 +1,4 @@
-# Deploy StudiVanta on Render and Neon
+# Deploy PadhSang on Render and Neon
 
 This setup uses a **free Render web service** for the Next.js application and **Neon's Free plan** for PostgreSQL. Keep both accounts on their free plans unless you intentionally approve an upgrade.
 

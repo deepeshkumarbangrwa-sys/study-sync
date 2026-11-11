@@ -1,6 +1,6 @@
 # Sign-in setup
 
-StudiVanta supports Google and Microsoft sign-in. A user needs a Google or Microsoft account associated with their email address; entering an arbitrary email address alone does not create a sign-in method. Personal Microsoft accounts and work/school accounts are supported by default. An organisation can still restrict consent to applications.
+PadhSang supports Google and Microsoft sign-in. A user needs a Google or Microsoft account associated with their email address; entering an arbitrary email address alone does not create a sign-in method. Personal Microsoft accounts and work/school accounts are supported by default. An organisation can still restrict consent to applications.
 
 No provider credentials are included in this project. Configure at least one provider before testing real sign-in. Providers without credentials appear as unavailable on the login page.
 
@@ -26,9 +26,9 @@ Keep `.env` private. Enter production secrets through your host's secret/environ
 5. In **Certificates & secrets**, create a client secret. Copy its **Value** into `AUTH_MICROSOFT_ENTRA_ID_SECRET`. The secret **ID** will not work. Record its expiry in your private deployment notes and renew it before it expires.
 6. Leave `AUTH_MICROSOFT_ENTRA_ID_ISSUER="https://login.microsoftonline.com/common/v2.0"` to support both account categories. To intentionally restrict the app to one organisation later, use `https://login.microsoftonline.com/YOUR-TENANT-ID/v2.0` and align the app registration with that restriction.
 7. The standard Auth.js provider requests `openid`, `profile`, `email`, and delegated Microsoft Graph `User.Read`. `User.Read` is used to retrieve the account's profile photo. Check these permissions under **API permissions**; a university or employer may require administrator consent.
-8. Restart StudiVanta, choose **Continue with Microsoft**, approve the requested access, and confirm that you reach your dashboard. Test a personal account and a work/school account if both audiences are required.
+8. Restart PadhSang, choose **Continue with Microsoft**, approve the requested access, and confirm that you reach your dashboard. Test a personal account and a work/school account if both audiences are required.
 
-Use the Web platform, not a single-page application registration: StudiVanta exchanges the authorization code on the server with a client secret. Do not enable implicit grant to fix redirect or consent errors.
+Use the Web platform, not a single-page application registration: PadhSang exchanges the authorization code on the server with a client secret. Do not enable implicit grant to fix redirect or consent errors.
 
 ## Google
 

@@ -6,7 +6,7 @@ import { previewInvitationForUser } from "@/lib/projects"
 import { JoinProjectButton } from "@/components/projects/join-project-button"
 import { ProjectShell, displayTimestamp, panelClass, primaryButton } from "@/components/projects/ui"
 
-export const metadata = { title: "Join a project | StudiVanta", referrer: "no-referrer" }
+export const metadata = { title: "Join a project | PadhSang", referrer: "no-referrer" }
 
 export default async function JoinPage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params

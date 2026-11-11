@@ -46,9 +46,9 @@ export default async function LoginPage({
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-600 text-xl font-bold text-white shadow-sm">
-            SV
+            PS
           </div>
-          <h1 className="text-3xl font-bold tracking-tight">StudiVanta</h1>
+          <h1 className="text-3xl font-bold tracking-tight">PadhSang</h1>
           <p className="mt-2 text-slate-600">Plan. Collaborate. Progress.</p>
         </div>
 
@@ -118,7 +118,7 @@ export default async function LoginPage({
 
           <p className="mt-5 text-xs leading-5 text-slate-500">
             Microsoft personal, work, and school accounts are supported. Your
-            organisation may have its own sign-in rules. StudiVanta does not
+            organisation may have its own sign-in rules. PadhSang does not
             receive your account password.
           </p>
         </section>
