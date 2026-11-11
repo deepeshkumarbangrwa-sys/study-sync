@@ -1,6 +1,8 @@
-# StudySync
+# StudiVanta
 
-StudySync is a collaborative workspace for student projects. Students and other team members can discuss their work, receive assigned tasks, track deadlines, and ask for more time. A personal planner and focus timer support individual study alongside shared projects.
+**Plan. Collaborate. Progress.**
+
+StudiVanta is a collaborative workspace for student projects. Students and other team members can discuss their work, receive assigned tasks, track deadlines, and ask for more time. A personal planner and focus timer support individual study alongside shared projects.
 
 The application uses Next.js, React, TypeScript, Tailwind CSS, Auth.js, and Prisma. Local development uses SQLite; the hosting configuration uses PostgreSQL on Neon and a Node web service on Render.
 

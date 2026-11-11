@@ -3,8 +3,8 @@ import type { ReactNode } from "react"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "StudySync — Workspace & Planner",
-  description: "Organise your coursework, manage deadlines, and track your study sessions with StudySync.",
+  title: "StudiVanta — Plan. Collaborate. Progress.",
+  description: "Plan projects, collaborate with your team, manage deadlines, and make steady progress with StudiVanta.",
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {

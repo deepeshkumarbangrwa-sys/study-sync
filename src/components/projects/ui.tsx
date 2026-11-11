@@ -12,8 +12,8 @@ export function ProjectShell({ children, name }: { children: ReactNode; name: st
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-5 py-4 sm:px-8">
           <Link href="/projects" className="flex items-center gap-3 font-bold tracking-tight">
-            <span aria-hidden="true" className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-sm text-white">SS</span>
-            <span className="text-xl">StudySync</span>
+            <span aria-hidden="true" className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-sm text-white">SV</span>
+            <span className="text-xl">StudiVanta</span>
           </Link>
           <nav aria-label="Main navigation" className="flex items-center gap-4 text-sm font-medium sm:gap-6">
             <Link href="/" className="text-slate-600 hover:text-indigo-700">My workspace</Link>

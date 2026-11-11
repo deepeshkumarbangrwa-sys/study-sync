@@ -46,10 +46,10 @@ export default async function LoginPage({
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-600 text-xl font-bold text-white shadow-sm">
-            SS
+            SV
           </div>
-          <h1 className="text-3xl font-bold tracking-tight">StudySync</h1>
-          <p className="mt-2 text-slate-600">Make room for focused study.</p>
+          <h1 className="text-3xl font-bold tracking-tight">StudiVanta</h1>
+          <p className="mt-2 text-slate-600">Plan. Collaborate. Progress.</p>
         </div>
 
         <section aria-labelledby="sign-in-heading" className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
@@ -118,11 +118,11 @@ export default async function LoginPage({
 
           <p className="mt-5 text-xs leading-5 text-slate-500">
             Microsoft personal, work, and school accounts are supported. Your
-            organisation may have its own sign-in rules. StudySync does not
+            organisation may have its own sign-in rules. StudiVanta does not
             receive your account password.
           </p>
         </section>
-        <p className="mt-6 text-center text-xs text-slate-500">Plan your work. Protect your focus.</p>
+        <p className="mt-6 text-center text-xs text-slate-500">Plan. Collaborate. Progress.</p>
       </div>
     </main>
   )
