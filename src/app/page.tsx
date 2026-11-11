@@ -7,6 +7,8 @@ import { getAssignedTasksForUser } from "@/lib/projects"
 import { TaskList } from "@/components/task-list"
 import { FocusTimer } from "@/components/focus-timer"
 
+export const dynamic = "force-dynamic"
+
 export default async function HomePage() {
   if (!authSecretConfigured) redirect("/login")
   const session = await auth()
@@ -58,7 +60,7 @@ export default async function HomePage() {
               const overdue = task.dueDate && task.dueDate < today
               const dueToday = task.dueDate === today
               return <li key={task.id} className="py-4">
-                <Link href={`/projects/${task.projectId}#task-${task.id}`} className="group flex flex-wrap items-start justify-between gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-600">
+                <Link href={`/projects/${task.projectId}#project-task-${task.id}`} className="group flex flex-wrap items-start justify-between gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-600">
                   <div className="min-w-0 flex-1"><p className="break-words text-sm font-semibold text-slate-900 group-hover:text-indigo-700">{task.title}</p><p className="mt-1 break-words text-xs text-slate-500">{task.projectName}</p></div>
                   <div className="flex flex-wrap gap-2 text-xs">
                     <span className={`rounded-md px-2 py-1 font-medium ${task.priority === "HIGH" ? "bg-amber-50 text-amber-800" : "bg-slate-100 text-slate-600"}`}>{task.priority[0] + task.priority.slice(1).toLowerCase()} priority</span>

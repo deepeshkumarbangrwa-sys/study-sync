@@ -82,11 +82,12 @@ test("personal tasks can be created, edited, persisted, completed, reopened, and
   await noHorizontalOverflow(page)
   await page.screenshot({ path: test.info().outputPath("dashboard-mobile.png"), fullPage: true })
 
-  await tasks.getByRole("checkbox", { name: "Mark Revise literature review as completed" }).check()
+  // These controlled checkboxes update after the server confirms the mutation.
+  await tasks.getByRole("checkbox", { name: "Mark Revise literature review as completed" }).click()
   await expect(editedTitle).toBeHidden()
   await tasks.getByRole("button", { name: /^Completed / }).click()
   await expect(editedTitle).toBeVisible()
-  await tasks.getByRole("checkbox", { name: "Mark Revise literature review as pending" }).uncheck()
+  await tasks.getByRole("checkbox", { name: "Mark Revise literature review as pending" }).click()
   await tasks.getByRole("button", { name: /^Pending / }).click()
   await tasks.getByRole("button", { name: "Delete Revise literature review", exact: true }).click()
   await tasks.getByRole("button", { name: "Delete task", exact: true }).click()
@@ -192,7 +193,7 @@ test("a project invitation leads to assigned work, feedback, an approved extensi
     await noHorizontalOverflow(memberPage)
     await memberPage.screenshot({ path: test.info().outputPath("project-mobile.png"), fullPage: true })
 
-    await taskCard.getByRole("checkbox", { name: "Mark Review research sources as completed" }).check()
+    await taskCard.getByRole("checkbox", { name: "Mark Review research sources as completed" }).click()
     await expect(taskCard).toBeHidden()
     await memberPage.goto("/")
     await expect(memberPage.getByRole("region", { name: /^Assigned to you/ }).getByText("Review research sources", { exact: true })).toHaveCount(0)

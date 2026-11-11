@@ -161,7 +161,12 @@ export async function setProjectTaskCompletedForUser(userId: string, projectId: 
     if (project.ownerId !== userId && task.assigneeId !== userId) {
       throw new ProjectError("Only the assignee or project owner can change this task's status.")
     }
-    return taskItem(await db.projectTask.update({ where: { id }, data: { completed } }))
+    const changed = await db.projectTask.updateMany({
+      where: { id, projectId: project.id, ...(project.ownerId === userId ? {} : { assigneeId: userId }) },
+      data: { completed },
+    })
+    if (!changed.count) throw new ProjectError("This task's assignment has changed. Refresh and try again.")
+    return taskItem(await db.projectTask.findUniqueOrThrow({ where: { id } }))
   })
 }
 
@@ -271,15 +276,24 @@ export async function decideTaskExtensionForUser(userId: string, projectId: unkn
     const request = await db.taskExtensionRequest.findFirst({ where: { id, projectId: project.id }, include: { task: true } })
     if (!request) throw new ProjectError("Extension request not found.")
     if (request.status !== "PENDING") throw new ProjectError("This request has already been decided.")
+    // Claim a pending decision atomically: concurrent approve/reject requests
+    // must not overwrite each other. A later failure rolls back this claim too.
+    const decision = await db.taskExtensionRequest.updateMany({
+      where: { id, projectId: project.id, status: "PENDING" },
+      data: { status: approve ? "APPROVED" : "REJECTED", pendingTaskId: null, decidedAt: new Date(), decidedById: userId },
+    })
+    if (!decision.count) throw new ProjectError("This request has already been decided.")
     if (approve) {
       const task = request.task
       if (task.completed || task.assigneeId !== request.requestedById || !task.dueDate || request.requestedDate <= task.dueDate) {
         throw new ProjectError("This task has changed. Reject this request and ask for a new one if needed.")
       }
-      await db.projectTask.update({ where: { id: task.id }, data: { dueDate: request.requestedDate } })
+      const changed = await db.projectTask.updateMany({
+        where: { id: task.id, projectId: project.id, assigneeId: request.requestedById, completed: false, dueDate: task.dueDate },
+        data: { dueDate: request.requestedDate },
+      })
+      if (!changed.count) throw new ProjectError("This task has changed. Reject this request and ask for a new one if needed.")
     }
-    return extensionItem(await db.taskExtensionRequest.update({
-      where: { id }, data: { status: approve ? "APPROVED" : "REJECTED", pendingTaskId: null, decidedAt: new Date(), decidedById: userId },
-    }))
+    return extensionItem(await db.taskExtensionRequest.findUniqueOrThrow({ where: { id } }))
   })
 }
