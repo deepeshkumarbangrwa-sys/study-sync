@@ -5,7 +5,7 @@ from PIL import Image
 from pptx import Presentation
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
-from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
+from pptx.enum.text import MSO_AUTO_SIZE, PP_ALIGN, MSO_ANCHOR
 from pptx.util import Inches, Pt
 from reportlab.lib.colors import HexColor as _HexColor, white
 from reportlab.lib.pagesizes import landscape
@@ -98,6 +98,8 @@ def add_text(slide, text, x, y, w, h, size=20, color=INK, bold=False,
     box = slide.shapes.add_textbox(Inches(x), Inches(y), Inches(w), Inches(h))
     tf = box.text_frame
     tf.clear()
+    tf.word_wrap = True
+    tf.auto_size = MSO_AUTO_SIZE.TEXT_TO_FIT_SHAPE
     tf.margin_left = tf.margin_right = Inches(margin)
     tf.margin_top = tf.margin_bottom = Inches(margin)
     tf.vertical_anchor = valign
@@ -108,6 +110,9 @@ def add_text(slide, text, x, y, w, h, size=20, color=INK, bold=False,
     p.font.size = Pt(size)
     p.font.bold = bold
     p.font.color.rgb = rgb(color)
+    p.space_before = Pt(0)
+    p.space_after = Pt(0)
+    p.line_spacing = 1.0
     return box
 
 
@@ -123,8 +128,10 @@ def add_rich_text(slide, title, body, x, y, w, h, accent=INDIGO,
     tf = box.text_frame
     tf.clear()
     tf.word_wrap = True
+    tf.auto_size = MSO_AUTO_SIZE.TEXT_TO_FIT_SHAPE
     tf.margin_left = tf.margin_right = Inches(0.02)
-    tf.margin_top = tf.margin_bottom = Inches(0.02)
+    tf.margin_top = tf.margin_bottom = Inches(0.04)
+    tf.vertical_anchor = MSO_ANCHOR.TOP
     for index, item in enumerate(body):
         p = tf.paragraphs[0] if index == 0 else tf.add_paragraph()
         p.text = item[1:] if item.startswith("•") else item
@@ -132,7 +139,10 @@ def add_rich_text(slide, title, body, x, y, w, h, accent=INDIGO,
         p.font.name = "Aptos"
         p.font.size = Pt(body_size)
         p.font.color.rgb = rgb(INK)
-        p.space_after = Pt(8)
+        p.alignment = PP_ALIGN.LEFT
+        p.space_before = Pt(0)
+        p.space_after = Pt(7)
+        p.line_spacing = 1.05
         if item.startswith("•"):
             p.text = "•  " + p.text.strip()
     return box
@@ -180,8 +190,8 @@ def build_pptx():
              2.5, 1.32, 18.8, 0.55, size=26, color="C7D2FE")
     add_text(slide, "PLAN. COLLABORATE. PROGRESS.", 22.5, 0.66, 9.6, 0.62,
              size=24, color=WHITE, bold=True, align=PP_ALIGN.RIGHT)
-    add_text(slide, "Final Project Poster  •  [Your Name]  •  [Student ID]  •  [Supervisor]",
-             18.2, 1.53, 13.9, 0.45, size=17, color="C7D2FE", align=PP_ALIGN.RIGHT)
+    add_text(slide, "Deepesh Kumar  •  SID 2327937  •  Supervisor: Priyanka Sharma",
+             17.2, 1.53, 14.9, 0.45, size=18, color="C7D2FE", align=PP_ALIGN.RIGHT)
 
     add_box(slide, 0.72, 3.18, 31.65, 2.0, fill=PALE, line="C7D2FE")
     add_text(slide,
@@ -363,7 +373,7 @@ def build_pdf():
     c.setFillColor(white); c.setFont("Helvetica-Bold", 0.34)
     c.drawRightString(32.1, H - 1.05, "PLAN. COLLABORATE. PROGRESS.")
     c.setFillColor(HexColor("C7D2FE")); c.setFont("Helvetica", 0.23)
-    c.drawRightString(32.1, H - 1.78, "Final Project Poster  •  [Your Name]  •  [Student ID]  •  [Supervisor]")
+    c.drawRightString(32.1, H - 1.78, "Deepesh Kumar  •  SID 2327937  •  Supervisor: Priyanka Sharma")
 
     pdf_box(c, 0.72, H - 5.18, 31.65, 2.0, fill=PALE, stroke="C7D2FE")
     c.setFillColor(HexColor(NAVY)); c.setFont("Helvetica-Bold", 0.37)
