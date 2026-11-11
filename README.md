@@ -4,6 +4,10 @@ StudySync is a collaborative workspace for student projects. Students and other 
 
 The application uses Next.js, React, TypeScript, Tailwind CSS, Auth.js, and Prisma. Local development uses SQLite; the hosting configuration uses PostgreSQL on Neon and a Node web service on Render.
 
+**Hosted app:** https://studysync-lw0p.onrender.com
+
+The application and database are deployed on free plans. Google and Microsoft sign-in remain unavailable until the provider credentials are entered in Render. Follow the [production sign-in setup](docs/DEPLOYMENT.md#current-deployment) to complete this step. After inactivity, the first visit may take longer while Render starts the service.
+
 ## Features
 
 - **Google and Microsoft sign-in.** Microsoft personal, work, and school accounts are supported when the app registration permits those account types.

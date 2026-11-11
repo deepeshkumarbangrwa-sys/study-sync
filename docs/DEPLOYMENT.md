@@ -6,6 +6,29 @@ Render's free PostgreSQL database expires after 30 days, so it is not the databa
 
 A free Render web service spins down after 15 minutes without incoming traffic. The next visit can take longer while it starts again. Allow for this when demonstrating the app. Neon also suspends idle compute and resumes it when queried.
 
+## Current deployment
+
+- App: https://studysync-lw0p.onrender.com
+- Source: [study-sync, main branch](https://github.com/deepeshkumarbangrwa-sys/study-sync/tree/main)
+- [Render service dashboard](https://dashboard.render.com/web/srv-dbq4vqjbc2fs73cv65a0), in the confirmed **My Workspace** workspace.
+- Render web service: **Free**, Frankfurt; automatic deployment from `main` enabled.
+- Neon PostgreSQL: **Free**, Frankfurt; the `studysync` database on the `production` branch.
+
+The database connection strings and generated authentication secret were configured privately in Render. The production migration completed, and `/api/health` returned HTTP 200 with `{"status":"ok"}` on 11 November 2026. See [Validation record](VALIDATION.md) for the scope of the checks.
+
+### Remaining provider setup
+
+Create or update the Google and Microsoft app registrations described in [Sign-in setup](AUTH_SETUP.md), using these exact **Web** redirect URLs:
+
+| Provider | Production callback URL |
+| --- | --- |
+| Google | `https://studysync-lw0p.onrender.com/api/auth/callback/google` |
+| Microsoft | `https://studysync-lw0p.onrender.com/api/auth/callback/microsoft-entra-id` |
+
+In the Render service's **Environment** settings, add `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `AUTH_MICROSOFT_ENTRA_ID_ID`, and `AUTH_MICROSOFT_ENTRA_ID_SECRET` from those registrations. Enter the secret values privately in Render; do not paste them into chat or commit them. The database variables, `AUTH_SECRET`, `AUTH_TRUST_HOST`, `AUTH_URL`, and Microsoft common issuer are already configured.
+
+Choose **Save, rebuild, and deploy**, wait until the deployment is Live, then test both providers with real accounts. The project's two-provider authentication requirement is not fully verified until both sign-ins succeed. Microsoft must allow personal and organizational accounts; Google's audience settings must permit the intended users.
+
 ## Source and runtime
 
 Deploy the reviewed Git branch containing the current application and its PostgreSQL migrations. Render must have access to that repository. Do not deploy an older branch that only contains the original SQLite scaffold.

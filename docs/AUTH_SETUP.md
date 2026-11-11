@@ -42,8 +42,9 @@ Use the Web platform, not a single-page application registration: StudySync exch
 
 ## Deployment
 
-- Set `AUTH_URL` to the actual HTTPS origin, such as `https://study.example.com`.
-- Register the corresponding production **Web** callback URLs with each provider: `https://study.example.com/api/auth/callback/microsoft-entra-id` and `https://study.example.com/api/auth/callback/google`.
+- The current deployment uses `AUTH_URL=https://studysync-lw0p.onrender.com`.
+- Register these production **Web** callback URLs: `https://studysync-lw0p.onrender.com/api/auth/callback/microsoft-entra-id` and `https://studysync-lw0p.onrender.com/api/auth/callback/google`. Update both the origin and callback URLs if the app's domain changes.
+- Enter the four provider ID/secret variables in the [Render service](https://dashboard.render.com/web/srv-dbq4vqjbc2fs73cv65a0)'s **Environment** settings, then save, rebuild, and deploy. The database and authentication secret are already configured. See [Current deployment](DEPLOYMENT.md#current-deployment).
 - Keep the callback protocol, hostname, port, and path consistent with the app. Only register callback URLs you control.
 - Use a persistent database and run the documented migrations before opening the app to users. SQLite requires durable writable storage; an ephemeral serverless filesystem will not preserve study data or sign-in sessions.
 - Set a strong, stable `AUTH_SECRET` in the deployment's secret settings. Rotating it can invalidate existing sign-in state.
