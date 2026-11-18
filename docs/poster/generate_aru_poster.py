@@ -192,7 +192,7 @@ def build_pptx():
     add_rect(slide, 0.55, 3.32, 15.4, 0.93, fill="F8FAFB", line=LINE, radius=True)
     add_metric(slide, "25/25", "automated checks passed", 1.15, 3.39, 3.8)
     add_metric(slide, "5/5", "browser workflows passed", 6.35, 3.39, 3.8)
-    add_metric(slide, "12", "production database tables", 11.5, 3.39, 3.8)
+    add_metric(slide, "1", "focused project workspace", 11.5, 3.39, 3.8)
     add_rect(slide, 5.72, 3.48, 0.012, 0.58, fill=LINE)
     add_rect(slide, 10.88, 3.48, 0.012, 0.58, fill=LINE)
 
@@ -204,14 +204,15 @@ def build_pptx():
 
     add_section_heading(slide, "01", "THE PROBLEM", x1, 4.55, w1)
     add_body(slide, [
-        "Student teams often split project discussions, assigned work and deadlines across several tools.",
-        "This makes responsibilities harder to track and increases the risk of exposing project information to the wrong user.",
+        "Students need a quick view of their own tasks and what other group members are doing.",
+        "When project discussion moves to social apps, unrelated notifications and content can interrupt focus.",
     ], x1, 5.04, w1, 1.08, 12.5)
 
     add_section_heading(slide, "02", "OBJECTIVES", x1, 6.22, w1)
     add_body(slide, [
-        "• Combine shared projects, tasks and discussion in one workspace.",
-        "• Protect project data with OAuth and server-side permission checks.",
+        "• Make responsibilities and progress visible to project members.",
+        "• Keep task discussion and feedback inside the project workspace.",
+        "• Protect project data with server-side permission checks.",
         "• Support private planning, reminders and focused study.",
     ], x1, 6.7, w1, 1.34, 12.2)
 
@@ -267,26 +268,26 @@ def build_pptx():
     add_body(slide, [
         "• 25 service/security tests and five browser workflows passed.",
         "• Non-members were denied private-project access.",
+        "• Assigned work appeared on the correct member dashboard.",
         "• Concurrent extension decisions produced one consistent outcome.",
-        "• Production build and PostgreSQL migration passed.",
     ], x3, 5.04, w3, 1.75, 12.1)
     add_rect(slide, x3, 6.84, w3, 0.68, fill=PALE_BLUE, line=LINE, radius=True)
     add_text(slide, "Finding", x3 + 0.16, 6.96, 0.7, 0.2,
              size=11, color=TEAL, bold=True)
-    add_text(slide, "Security depended on external OAuth and hosting configuration as well as application code.",
+    add_text(slide, "Designed to keep project chat inside the workspace, reducing the need to open social apps.",
              x3 + 0.85, 6.91, w3 - 1.02, 0.36, size=11.2, color=NAVY, bold=True)
 
     add_section_heading(slide, "06", "LIMITATIONS & NEXT STEPS", x3, 7.74, w3)
     add_body(slide, [
-        "• Complete live Microsoft provider verification.",
-        "• Add real-time discussion and optional email reminders.",
+        "• Project discussion currently requires manual refresh.",
+        "• Distraction reduction has not yet been evaluated with students.",
         "• Conduct student usability testing and an independent security review.",
         "• Restore reviewed production hosting for live demonstrations.",
     ], x3, 8.23, w3, 1.26, 11.8)
 
     add_section_heading(slide, "07", "CONCLUSION", x3, 9.6, 3.25)
     add_text(slide,
-             "PadhSang combines secure authentication, role-based access and practical study tools in one student workspace.",
+             "PadhSang brings team progress, assigned work and project discussion into one role-protected workspace.",
              x3, 10.08, 3.25, 0.72, size=11.8, color=INK)
     slide.shapes.add_picture(str(QR_PATH), Inches(14.48), Inches(9.62),
                              width=Inches(1.22), height=Inches(1.22))
@@ -405,7 +406,7 @@ def build_pdf():
     pdf_text(c, "RESEARCH QUESTION", 0.79, 2.73, 1.6, 0.24, 10, TEAL, True)
     pdf_text(c, RESEARCH_QUESTION, 2.42, 2.7, 13.15, 0.3, 14, NAVY, True)
     pdf_rect(c, 0.55, 3.32, 15.4, 0.93, "F8FAFB", LINE, 0.08)
-    metrics = [("25/25", "AUTOMATED CHECKS PASSED"), ("5/5", "BROWSER WORKFLOWS PASSED"), ("12", "PRODUCTION DATABASE TABLES")]
+    metrics = [("25/25", "AUTOMATED CHECKS PASSED"), ("5/5", "BROWSER WORKFLOWS PASSED"), ("1", "FOCUSED PROJECT WORKSPACE")]
     for i, (value, label) in enumerate(metrics):
         xx = [1.15, 6.35, 11.5][i]
         pdf_text(c, value, xx, 3.42, 3.8, 0.45, 30, NAVY, True, "center")
@@ -415,9 +416,9 @@ def build_pdf():
     w1, w2, w3 = 4.55, 5.08, 4.9
     pdf_rect(c, 5.31, 4.55, 0.012, 6.33, LINE); pdf_rect(c, 10.83, 4.55, 0.012, 6.33, LINE)
     pdf_heading(c, "01", "THE PROBLEM", x1, 4.55, w1)
-    pdf_text(c, "Student teams often split project discussions, assigned work and deadlines across several tools.\n\nThis makes responsibilities harder to track and increases the risk of exposing project information to the wrong user.", x1, 5.04, w1, 1.08, 12.5)
+    pdf_text(c, "Students need a quick view of their own tasks and what other group members are doing.\n\nWhen project discussion moves to social apps, unrelated notifications and content can interrupt focus.", x1, 5.04, w1, 1.08, 12.5)
     pdf_heading(c, "02", "OBJECTIVES", x1, 6.22, w1)
-    pdf_text(c, "• Combine shared projects, tasks and discussion in one workspace.\n• Protect project data with OAuth and server-side permission checks.\n• Support private planning, reminders and focused study.", x1, 6.7, w1, 1.34, 12.2)
+    pdf_text(c, "• Make responsibilities and progress visible to project members.\n• Keep task discussion and feedback inside the project workspace.\n• Protect project data with server-side permission checks.\n• Support private planning, reminders and focused study.", x1, 6.7, w1, 1.34, 12.2)
     pdf_heading(c, "03", "SECURITY BY DESIGN", x1, 8.18, w1)
     pdf_text(c, "• Database-backed authenticated sessions\n• Owner, member and assignee permission checks\n• Random invitation tokens stored only as hashes\n• Seven-day invitation expiry and revocation\n• Transactional deadline-extension decisions\n• Safe internal redirect validation", x1, 8.66, w1, 1.86, 11.8)
     pdf_text(c, "Scope  |  Student project collaboration and personal study planning.", x1, 10.58, w1, 0.28, 9.5, MUTED)
@@ -437,14 +438,14 @@ def build_pdf():
     pdf_text(c, "Next.js  ·  TypeScript  ·  Auth.js  ·  Prisma  ·  PostgreSQL", x2, 10.18, w2, 0.28, 10.3, TEAL, True, "center")
     pdf_text(c, "Local and browser tests use isolated SQLite databases and synthetic accounts.", x2, 10.5, w2, 0.26, 9.5, MUTED, False, "center")
     pdf_heading(c, "05", "RESULTS & FINDINGS", x3, 4.55, w3)
-    pdf_text(c, "• 25 service/security tests and five browser workflows passed.\n• Non-members were denied private-project access.\n• Concurrent extension decisions produced one consistent outcome.\n• Production build and PostgreSQL migration passed.", x3, 5.04, w3, 1.75, 12.1)
+    pdf_text(c, "• 25 service/security tests and five browser workflows passed.\n• Non-members were denied private-project access.\n• Assigned work appeared on the correct member dashboard.\n• Concurrent extension decisions produced one consistent outcome.", x3, 5.04, w3, 1.75, 12.1)
     pdf_rect(c, x3, 6.84, w3, 0.68, PALE_BLUE, LINE, 0.08)
     pdf_text(c, "Finding", x3 + 0.16, 6.96, 0.7, 0.2, 11, TEAL, True)
-    pdf_text(c, "Security depended on external OAuth and hosting configuration as well as application code.", x3 + 0.85, 6.91, w3 - 1.02, 0.36, 11.2, NAVY, True)
+    pdf_text(c, "Designed to keep project chat inside the workspace, reducing the need to open social apps.", x3 + 0.85, 6.91, w3 - 1.02, 0.36, 11.2, NAVY, True)
     pdf_heading(c, "06", "LIMITATIONS & NEXT STEPS", x3, 7.74, w3)
-    pdf_text(c, "• Complete live Microsoft provider verification.\n• Add real-time discussion and optional email reminders.\n• Conduct student usability testing and an independent security review.\n• Restore reviewed production hosting for live demonstrations.", x3, 8.23, w3, 1.26, 11.8)
+    pdf_text(c, "• Project discussion currently requires manual refresh.\n• Distraction reduction has not yet been evaluated with students.\n• Conduct student usability testing and an independent security review.\n• Restore reviewed production hosting for live demonstrations.", x3, 8.23, w3, 1.26, 11.8)
     pdf_heading(c, "07", "CONCLUSION", x3, 9.6, 3.25)
-    pdf_text(c, "PadhSang combines secure authentication, role-based access and practical study tools in one student workspace.", x3, 10.08, 3.25, 0.72, 11.8, INK)
+    pdf_text(c, "PadhSang brings team progress, assigned work and project discussion into one role-protected workspace.", x3, 10.08, 3.25, 0.72, 11.8, INK)
     c.drawImage(QR_PATH, 14.48, H - 10.84, 1.22, 1.22, mask="auto")
     pdf_text(c, "VIEW SOURCE", 14.44, 10.85, 1.3, 0.2, 8.5, TEAL, True, "center")
     pdf_rect(c, 0.55, 11.02, 15.4, 0.012, NAVY)
